@@ -6,10 +6,11 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/prigotti/cargo/clientapi/application"
 	"github.com/prigotti/cargo/clientapi/infrastructure/adapter/http/handler"
+	"github.com/prigotti/cargo/clientapi/infrastructure/adapter/job"
 	"google.golang.org/grpc"
 )
 
-// Server holds all dependencies for this microservice
+// Server holds all dependencies for this microservice.
 type Server struct {
 	configuration *Configuration
 	httpServer    *HTTPServer
@@ -17,7 +18,7 @@ type Server struct {
 	portService   application.PortService
 }
 
-// NewServer is the Server factory
+// NewServer sets up the server's components and wire it together.
 func NewServer(ctx context.Context, configuration *Configuration) (*Server, error) {
 	s := &Server{configuration: configuration}
 	var err error
@@ -36,6 +37,8 @@ func NewServer(ctx context.Context, configuration *Configuration) (*Server, erro
 	if err != nil {
 		return nil, err
 	}
+
+	job.RunJSONFileDataForwarderJob(ctx, s.portService, s.configuration.JSONPath)
 
 	return s, nil
 }

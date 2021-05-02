@@ -9,7 +9,7 @@ import (
 	"google.golang.org/grpc"
 )
 
-// Server holds all dependencies for this microservice
+// Server holds all dependencies for this microservice.
 type Server struct {
 	configuration  *Configuration
 	database       *Database
@@ -18,7 +18,7 @@ type Server struct {
 	portService    application.PortService
 }
 
-// NewServer is the Server factory
+// NewServer sets up the server's components and wire it together.
 func NewServer(ctx context.Context, configuration *Configuration) (*Server, error) {
 	s := &Server{configuration: configuration}
 	var err error
