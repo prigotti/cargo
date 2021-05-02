@@ -1,0 +1,36 @@
+# Environment configuration flexility has been left out for simplicity,
+# but can be easily added to override application default configuration.
+
+version: "3"
+
+services:
+  client-api:
+    build:
+      context: .
+      dockerfile: client-api.Dockerfile
+    container_name: client-api
+    ports:
+      - "9001:9001"
+    volumes:
+      - ./ports.json:/data/ports.json
+    mem_limit: 200m
+
+  ports-service:
+    build:
+      context: .
+      dockerfile: ports-service.Dockerfile
+    container_name: ports-service
+    ports:
+      - "9002:9002"
+    mem_limit: 200m
+
+  ports-database:
+    image: mongo:latest
+    container_name: ports-database
+    # volumes:
+    #   - ./data/mongodb:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=secret
+    ports:
+      - "27017:27017"
