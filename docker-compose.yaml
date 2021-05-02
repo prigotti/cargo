@@ -22,6 +22,8 @@ services:
     container_name: ports-service
     ports:
       - "9002:9002"
+    environment:
+      - DATABASE_URI=mongodb://ports-database:27017
     mem_limit: 200m
 
   ports-database:

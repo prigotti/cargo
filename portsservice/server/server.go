@@ -12,6 +12,7 @@ import (
 // Server holds all dependencies for this microservice
 type Server struct {
 	configuration  *Configuration
+	database       *Database
 	grpcServer     *GRPCServer
 	portRepository domain.PortRepository
 	portService    application.PortService
@@ -23,7 +24,18 @@ func NewServer(ctx context.Context, configuration *Configuration) (*Server, erro
 	var err error
 	gs := grpc.NewServer()
 
-	s.portRepository = repository.NewMongoDBPortRepository()
+	s.database, err = SetupDatabase(
+		ctx,
+		s.configuration.DatabaseURI,
+		s.configuration.DatabaseName,
+		s.configuration.DatabaseUser,
+		s.configuration.DatabasePassword,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	s.portRepository, err = repository.NewMongoDBPortRepository(ctx, s.database.Database)
 	if err != nil {
 		return nil, err
 	}
