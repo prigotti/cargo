@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+option go_package = "github.com/prigotti/cargo/common/pb";
+
+package port;
+
+// Extracted from the JSON sample data file
+message Port {
+  string id = 1;
+  string name = 2;
+  string city = 3;
+  string country = 4;
+  repeated string alias = 5;
+  repeated string regions = 6;
+  repeated float coordinates = 7;
+  string province = 8;
+  string timezone = 9;
+  repeated string unlocs = 10;
+  string code = 11;
+}
+
+message ListQuery {
+  uint32 page = 1;
+  uint32 perPage = 2;
+}
+
+message PortListData {
+  uint32 page = 1;
+  uint32 perPage = 2;
+  uint32 total = 3;
+  repeated Port ports = 4;
+}
+
+message SendBatchResponse { string message = 1; }
+
+service PortService {
+  rpc CreateOrUpdateStream(stream Port) returns (SendBatchResponse);
+  rpc List(ListQuery) returns (PortListData);
+}
