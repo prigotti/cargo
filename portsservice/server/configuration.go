@@ -5,15 +5,21 @@ import (
 	"github.com/joho/godotenv"
 )
 
-const ()
+// Default values and environment variable map keys
+const (
+	defaultGRPCServerBindAddress = "0.0.0.0:9002"
+)
 
 // Configuration holds overall server configuration data
 type Configuration struct {
+	GRPCServerBindAddress string
 }
 
 // DefaultConfiguration retrieves default Configuration data
 func DefaultConfiguration() *Configuration {
-	return &Configuration{}
+	return &Configuration{
+		GRPCServerBindAddress: defaultGRPCServerBindAddress,
+	}
 }
 
 // GetEnvironmentConfiguration retrieves environment configuration

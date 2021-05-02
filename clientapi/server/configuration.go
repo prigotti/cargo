@@ -5,6 +5,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
+// Default values and environment variable map keys
 const ()
 
 // Configuration holds overall server configuration data
