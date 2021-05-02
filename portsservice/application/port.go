@@ -4,10 +4,16 @@ import (
 	"context"
 	"io"
 
+	paginate "github.com/gobeam/mongo-go-pagination"
 	"github.com/prigotti/cargo/common/pb"
 	"github.com/prigotti/cargo/portsservice/domain"
 	"go.mongodb.org/mongo-driver/mongo"
 	"google.golang.org/grpc"
+	"gopkg.in/mgo.v2/bson"
+)
+
+const (
+	maxPerPage = 100
 )
 
 // PortService is the application service mainly responsible for
@@ -91,5 +97,22 @@ func (s *portService) CreateOrUpdateStream(stream pb.PortService_CreateOrUpdateS
 // overwhelmed by pagination, filtering and other querying concerns.
 // Ideally we'd have a port/interface for generic object queries.
 func (s *portService) List(ctx context.Context, q *pb.ListQuery) (*pb.PortListData, error) {
-	return nil, nil
+	d := &pb.PortListData{}
+
+	perPage := q.PerPage
+	if perPage > maxPerPage {
+		perPage = maxPerPage
+	}
+
+	// Added this library to make it easier to paginate queries
+	data, err := paginate.New(s.collection).Filter(bson.M{}).Limit(int64(perPage)).Page(int64(q.Page)).Sort("id", 1).Decode(&d.Ports).Find()
+	if err != nil {
+		return nil, err
+	}
+
+	d.Page = uint32(data.Pagination.Page)
+	d.PerPage = uint32(data.Pagination.PerPage)
+	d.Total = uint32(data.Pagination.Total)
+
+	return d, nil
 }

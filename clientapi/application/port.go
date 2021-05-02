@@ -8,6 +8,11 @@ import (
 	"google.golang.org/grpc"
 )
 
+const (
+	DefaultPage    = 0
+	DefaultPerPage = 10
+)
+
 // PortService is the application service responsible for sending
 // and retrieving Port data to the Port domain microservice.
 type PortService interface {

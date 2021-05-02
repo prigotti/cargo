@@ -9,8 +9,9 @@ import (
 
 // Default values and environment variable map keys
 const (
-	defaultJSONPath          = "./ports.json"
-	defaultGRPCServerAddress = "localhost:9002"
+	defaultJSONPath              = "./ports.json"
+	defaultHTTPServerBindAddress = "0.0.0.0:9001"
+	defaultGRPCServerAddress     = "localhost:9002"
 
 	jsonPathKey       = "JSON_PATH"
 	grpcServerAddress = "GRPC_SERVER_ADDRESS"
@@ -18,15 +19,17 @@ const (
 
 // Configuration holds overall server configuration data
 type Configuration struct {
-	JSONPath          string
-	GRPCServerAddress string
+	JSONPath              string
+	HTTPServerBindAddress string
+	GRPCServerAddress     string
 }
 
 // DefaultConfiguration retrieves default Configuration data
 func DefaultConfiguration() *Configuration {
 	return &Configuration{
-		JSONPath:          defaultJSONPath,
-		GRPCServerAddress: defaultGRPCServerAddress,
+		JSONPath:              defaultJSONPath,
+		HTTPServerBindAddress: defaultHTTPServerBindAddress,
+		GRPCServerAddress:     defaultGRPCServerAddress,
 	}
 }
 

@@ -11,6 +11,9 @@ services:
     container_name: client-api
     ports:
       - "9001:9001"
+    environment:
+      - GRPC_SERVER_ADDRESS=ports-service:9002
+      - JSON_PATH=/data/ports.json
     volumes:
       - ./ports.json:/data/ports.json
     mem_limit: 200m
