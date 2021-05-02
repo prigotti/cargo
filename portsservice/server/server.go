@@ -35,12 +35,21 @@ func NewServer(ctx context.Context, configuration *Configuration) (*Server, erro
 		return nil, err
 	}
 
-	s.portRepository, err = repository.NewMongoDBPortRepository(ctx, s.database.Database)
+	s.portRepository, err = repository.NewMongoDBPortRepository(
+		ctx,
+		s.database.Database,
+		s.configuration.PortCollection,
+	)
 	if err != nil {
 		return nil, err
 	}
 
-	s.portService = application.NewPortService(gs, s.portRepository)
+	s.portService = application.NewPortService(
+		gs,
+		s.portRepository,
+		s.database.Database,
+		s.configuration.PortCollection,
+	)
 
 	s.grpcServer, err = SetupGRPCServer(ctx, gs, s.configuration.GRPCServerBindAddress)
 	if err != nil {

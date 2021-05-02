@@ -10,17 +10,17 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-const (
-	portCollection = "Ports"
-)
-
 type portRepository struct {
 	database   *mongo.Database
 	collection *mongo.Collection
 }
 
 // NewMongoDBPortRepository is a factory for the MongoDB Port Repository adapter
-func NewMongoDBPortRepository(ctx context.Context, database *mongo.Database) (domain.PortRepository, error) {
+func NewMongoDBPortRepository(
+	ctx context.Context,
+	database *mongo.Database,
+	portCollection string,
+) (domain.PortRepository, error) {
 	collection := database.Collection(portCollection)
 
 	// This is idempotent, so should be fine
@@ -42,7 +42,12 @@ func NewMongoDBPortRepository(ctx context.Context, database *mongo.Database) (do
 
 // Save is an upsert operation
 func (r *portRepository) Save(ctx context.Context, p *domain.Port) error {
-	_, err := r.collection.UpdateOne(ctx, bson.M{"id": p.ID}, bson.M{"$set": p}, options.Update().SetUpsert(true))
+	_, err := r.collection.UpdateOne(
+		ctx,
+		bson.M{"id": p.ID},
+		bson.M{"$set": p},
+		options.Update().SetUpsert(true),
+	)
 
 	return err
 }
@@ -57,6 +62,7 @@ func (r *portRepository) GetWithID(ctx context.Context, id string) (*domain.Port
 	}
 
 	p := &domain.Port{}
+
 	if err := res.Decode(p); err != nil {
 		return nil, err
 	}

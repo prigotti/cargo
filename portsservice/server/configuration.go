@@ -14,6 +14,7 @@ const (
 	defaultDatabaseURI           = "mongodb://localhost:27017"
 	defaultDatabaseUser          = "admin"
 	defaultDatabasePassword      = "secret"
+	defaultPortCollection        = "Ports"
 
 	databaseURIKey = "DATABASE_URI"
 )
@@ -25,6 +26,7 @@ type Configuration struct {
 	DatabaseName          string
 	DatabaseUser          string
 	DatabasePassword      string
+	PortCollection        string
 }
 
 // DefaultConfiguration retrieves default Configuration data
@@ -35,6 +37,7 @@ func DefaultConfiguration() *Configuration {
 		DatabaseURI:           defaultDatabaseURI,
 		DatabaseUser:          defaultDatabaseUser,
 		DatabasePassword:      defaultDatabasePassword,
+		PortCollection:        defaultPortCollection,
 	}
 }
 
