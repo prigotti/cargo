@@ -10,6 +10,9 @@ The binaries are compiled on Docker image builds, so running the following shoul
 $ docker-compose up -d
 ```
 
+The Port list query endpoint should be available on `localhost:9001/ports`.
+Query parameters `page` and `perPage` are available as pagination has been implemented.
+
 If rebuilds are necessary, just run
 
 ```
